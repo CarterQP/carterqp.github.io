@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <title>PHP REST API &amp; Laravel Music API Documentation</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Music API Documentation</h1>
+    </header>
+    <main>
+        
+<article>
+    <h2>PHP REST API &amp; Laravel Music API Documentation</h2>
+    <h1 id="php-rest-api-server-documentation-project-1">PHP REST API Server Documentation (Project 1)</h1>
+<p>This documentation covers:</p>
+<ul>
+<li>PHP REST API server</li>
+<li>MySQL database setup</li>
+<li>Laravel Docker deployment</li>
+<li>Hugo documentation setup</li>
+</ul>
+<hr>
+<h2 id="1-introduction">1. Introduction</h2>
+<p>This project implements a REST API using PHP, MySQL, and Nginx.</p>
+<p>Features:</p>
+<ul>
+<li>REST architecture</li>
+<li>Secure endpoints with Bearer tokens</li>
+<li>Works locally via Nginx + PHP-FPM</li>
+<li>Can be containerized using Docker</li>
+</ul>
+<hr>
+<h2 id="2-install-mysql">2. Install MySQL</h2>
+<ol>
+<li>Download the <strong>MySQL Installer</strong>.</li>
+<li>During setup, set a root password.</li>
+<li>Download <strong>MySQL Workbench</strong>.</li>
+<li>Launch MySQL Workbench → Connect as <code>root</code>.</li>
+<li>Create the database:</li>
+</ol>
+<p>CREATE DATABASE musicdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE musicdb;</p>
+<hr>
+<h2 id="3-creating-database-tables">3. Creating Database Tables</h2>
+<p>CREATE TABLE users (
+id INT AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(50) UNIQUE,
+token VARCHAR(64),
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</p>
+<p>CREATE TABLE songs (
+id INT AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(255),
+artist VARCHAR(255),
+genre VARCHAR(100),
+filename VARCHAR(255),
+uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</p>
+<p>CREATE TABLE comments (
+id INT AUTO_INCREMENT PRIMARY KEY,
+song_id INT,
+commenter VARCHAR(100),
+comment TEXT,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (song_id) REFERENCES songs(id)
+);</p>
+<p>INSERT INTO users (username, token) VALUES (&lsquo;admin&rsquo;, &lsquo;1234567890abcdef&rsquo;);</p>
+<hr>
+<h2 id="4-download-php">4. Download PHP</h2>
+<pre><code>Download PHP and extract to C:/php.
+
+Add PHP to your system PATH.
+
+Run PHP-FPM:
+</code></pre>
+<p>php-cgi -b 127.0.0.1:9000</p>
+<hr>
+<h2 id="5-download-nginx">5. Download Nginx</h2>
+<pre><code>Download and extract to C:/nginx.
+
+Configure nginx.conf:
+</code></pre>
+<p>server {
+listen 80;
+server_name localhost;
+root C:/project1;</p>
+<pre><code>index index.php index.html;
+
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+
+location ~ \.php$ {
+    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include fastcgi_params;
+}
+</code></pre>
+<p>}</p>
+<pre><code>Reload Nginx:
+</code></pre>
+<p>nginx -s reload</p>
+<hr>
+<h2 id="6-cors-configuration">6. CORS Configuration</h2>
+<p>In index.php:</p>
+<p>header(&ldquo;Access-Control-Allow-Origin: *&rdquo;);
+header(&ldquo;Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS&rdquo;);
+header(&ldquo;Access-Control-Allow-Headers: Content-Type, Authorization&rdquo;);</p>
+<hr>
+<h2 id="7-php-rest-api-endpoints">7. PHP REST API Endpoints</h2>
+<p>Endpoint 1: Fetch all songs</p>
+<p>curl http://localhost/songs</p>
+<p>Response:</p>
+<p>[{&ldquo;id&rdquo;:1,&ldquo;title&rdquo;:&ldquo;Song1&rdquo;,&ldquo;artist&rdquo;:&ldquo;Artist1&rdquo;,&ldquo;genre&rdquo;:&ldquo;Pop&rdquo;,&ldquo;filename&rdquo;:&ldquo;song.mp3&rdquo;}]</p>
+<p>Endpoint 2: Fetch song by ID</p>
+<p>curl http://localhost/songs/1</p>
+<p>Response:</p>
+<p>{&ldquo;id&rdquo;:1,&ldquo;title&rdquo;:&ldquo;Song1&rdquo;,&ldquo;artist&rdquo;:&ldquo;Artist1&rdquo;,&ldquo;genre&rdquo;:&ldquo;Pop&rdquo;,&ldquo;filename&rdquo;:&ldquo;song.mp3&rdquo;}</p>
+<p>Endpoint 3: Upload new song (Bearer token)</p>
+<p>curl -X POST http://localhost/songs <br>
+-H &ldquo;Authorization: Bearer 1234567890abcdef&rdquo; <br>
+-F &ldquo;title=New Song&rdquo; <br>
+-F &ldquo;artist=Me&rdquo; <br>
+-F &ldquo;genre=Pop&rdquo; <br>
+-F &ldquo;<a href="mailto:file=@song.mp3">file=@song.mp3</a>&rdquo;</p>
+<p>Response:</p>
+<p>{&ldquo;message&rdquo;:&ldquo;Song uploaded successfully&rdquo;}</p>
+<p>(Additional endpoints: update, delete, download, filter by artist/genre, add comment, search by title – all follow same format)</p>
+<hr>
+<h2 id="8-docker-deployment">8. Docker Deployment</h2>
+<p>Dockerfile</p>
+<pre><code>PHP 8.2 base image
+
+Composer installed
+
+Laravel dependencies installed
+
+Exposes port 8000
+</code></pre>
+<p>docker-compose.yml</p>
+<p>version: &ldquo;3.8&rdquo;
+services:
+app:
+build: .
+ports:
+- &ldquo;8000:80&rdquo;
+volumes:
+- .:/var/www/html
+depends_on:
+- db</p>
+<p>db:
+image: mysql:8.0
+environment:
+MYSQL_ROOT_PASSWORD: secret
+MYSQL_DATABASE: musicapi_db
+ports:
+- &ldquo;3306:3306&rdquo;
+volumes:
+- db_data:/var/lib/mysql</p>
+<p>volumes:
+db_data:</p>
+<p>Setup Script (setup.sh)</p>
+<p>#!/bin/bash
+docker-compose build
+docker-compose up -d</p>
+<pre><code>Builds Laravel app and MySQL container
+
+Maps ports for localhost testing
+
+Runs migrations after container starts
+
+![Screen Capture]( Screenshot 2025-12-05 205859.png)
+</code></pre>
+<hr>
+<h2 id="9-hugo-documentation-deployment">9. Hugo Documentation Deployment</h2>
+<pre><code>Place this Markdown in content/project1.md.
+
+Add theme:
+</code></pre>
+<p>hugo mod get github.com/theNewDynamic/gohugo-theme-ananke</p>
+<pre><code>config.toml (updated for Hugo v0.152+):
+</code></pre>
+<p>baseURL = &ldquo;http://localhost:1313/&rdquo;
+languageCode = &ldquo;en-us&rdquo;
+title = &ldquo;Music API Documentation&rdquo;
+theme = &ldquo;ananke&rdquo;</p>
+<p>[pagination]
+pagerSize = 10</p>
+<pre><code>Start Hugo server:
+</code></pre>
+<p>hugo server -D</p>
+<pre><code>Navigate to http://localhost:1313/ to view documentation.
+</code></pre>
+<hr>
+<h2 id="10-notes--troubleshooting">10. Notes &amp; Troubleshooting</h2>
+<pre><code>Common Laravel issues:
+
+    500 Internal Server Error: Usually routing/migration issues
+
+    Forbidden: Apache permissions or port conflict
+
+    MySQL connection errors: Check credentials in .env and XAMPP server status
+
+Docker tips:
+
+    Port 3306 conflict: change host port if MySQL already runs in XAMPP
+
+    Composer errors: ensure composer.lock exists and .env configured
+</code></pre>
+
+</article>
+
+    </main>
+    <footer>
+        <p>&copy; 2025 Music API Project</p>
+    </footer>
+</body>
+</html>

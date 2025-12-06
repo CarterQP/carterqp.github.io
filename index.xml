@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Music API Documentation</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Music API Documentation</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 05 Dec 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP REST API &amp; Laravel Music API Documentation</title>
+      <link>http://localhost:1313/project1/</link>
+      <pubDate>Fri, 05 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/project1/</guid>
+      <description>&lt;h1 id=&#34;php-rest-api-server-documentation-project-1&#34;&gt;PHP REST API Server Documentation (Project 1)&lt;/h1&gt;&#xA;&lt;p&gt;This documentation covers:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;PHP REST API server&lt;/li&gt;&#xA;&lt;li&gt;MySQL database setup&lt;/li&gt;&#xA;&lt;li&gt;Laravel Docker deployment&lt;/li&gt;&#xA;&lt;li&gt;Hugo documentation setup&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;1-introduction&#34;&gt;1. Introduction&lt;/h2&gt;&#xA;&lt;p&gt;This project implements a REST API using PHP, MySQL, and Nginx.&lt;/p&gt;&#xA;&lt;p&gt;Features:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;REST architecture&lt;/li&gt;&#xA;&lt;li&gt;Secure endpoints with Bearer tokens&lt;/li&gt;&#xA;&lt;li&gt;Works locally via Nginx + PHP-FPM&lt;/li&gt;&#xA;&lt;li&gt;Can be containerized using Docker&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;2-install-mysql&#34;&gt;2. Install MySQL&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Download the &lt;strong&gt;MySQL Installer&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;li&gt;During setup, set a root password.&lt;/li&gt;&#xA;&lt;li&gt;Download &lt;strong&gt;MySQL Workbench&lt;/strong&gt;.&lt;/li&gt;&#xA;&lt;li&gt;Launch MySQL Workbench → Connect as &lt;code&gt;root&lt;/code&gt;.&lt;/li&gt;&#xA;&lt;li&gt;Create the database:&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;CREATE DATABASE musicdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;&#xA;USE musicdb;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
